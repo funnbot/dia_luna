@@ -1,0 +1,35 @@
+[gd_scene load_steps=7 format=4 uid="uid://b2tl1wn08ei1p"]
+
+[ext_resource type="Texture2D" uid="uid://d034tpbqg6trs" path="res://assets/atlas/TinyFarm_Structures.png" id="1_205bl"]
+[ext_resource type="Script" uid="uid://c6r63fhvtvew0" path="res://src/entity/item/ItemContainerComponent.cs" id="2_6yx0j"]
+[ext_resource type="TileSet" uid="uid://bdk62mcdtnwo2" path="res://assets/atlas/tinyfarm.tres" id="2_ewe3o"]
+[ext_resource type="TileSet" uid="uid://b8ptbyejdkmit" path="res://assets/atlas/tinyfarm_structures_tileset.tres" id="3_2mpq8"]
+[ext_resource type="PackedScene" uid="uid://cx8rgwuba0wle" path="res://src/entity/character/player/player.tscn" id="5_1s7ag"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ewe3o"]
+atlas = ExtResource("1_205bl")
+region = Rect2(0, 16, 8, 16)
+
+[node name="TestInteractable" type="Node"]
+
+[node name="Node2D" type="Node2D" parent="."]
+visible = false
+
+[node name="Sprite2D" type="Sprite2D" parent="Node2D"]
+texture = SubResource("AtlasTexture_ewe3o")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Node2D"]
+
+[node name="ItemContainerComponent" type="Node" parent="Node2D"]
+script = ExtResource("2_6yx0j")
+Size = 5
+metadata/_custom_type_script = "uid://c6r63fhvtvew0"
+
+[node name="Background" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAD8/wIAAAAEAAAAAAD9/wIAAAAEAAAAAAD9/wMAAAAEAAAAAAD+/wMAAAAEAAAAAAD+/wQAAAAEAAAAAAD//wQAAAAEAAAAAAAAAAQAAAAEAAAAAAABAAQAAAAEAAAAAAACAAQAAAAEAAAAAAADAAQAAAAEAAAAAAADAAUAAAAEAAAAAAAEAAUAAAAEAAAAAAAEAAQAAAAEAAAAAAAEAAMAAAAEAAAAAAADAAMAAAAEAAAAAAADAAIAAAAEAAAAAAACAAIAAAAEAAAAAAABAAIAAAAEAAAAAAAAAAIAAAAEAAAAAAD//wIAAAAEAAAAAAD+/wIAAAAEAAAAAAD7/wIAAAAEAAAAAAD7/wMAAAAEAAAAAAD7/wQAAAAEAAAAAAD8/wQAAAAEAAAAAAD8/wUAAAAEAAAAAAD9/wUAAAAEAAAAAAD+/wUAAAAEAAAAAAD//wUAAAAEAAAAAAAAAAUAAAAEAAAAAAABAAUAAAAEAAAAAAACAAUAAAAEAAAAAAD7/wUAAAAEAAAAAAD6/wUAAAAEAAAAAAD6/wQAAAAEAAAAAAD8/wMAAAAEAAAAAAD9/wQAAAAEAAAAAAD//wMAAAAEAAAAAAAAAAMAAAAEAAAAAAABAAMAAAAEAAAAAAACAAMAAAAEAAAAAAD6/wMAAAAEAAAAAAD6/wIAAAAEAAAAAAAEAAIAAAAEAAAAAAA=")
+tile_set = ExtResource("2_ewe3o")
+
+[node name="Structures" type="TileMapLayer" parent="."]
+tile_set = ExtResource("3_2mpq8")
+
+[node name="Player" parent="." instance=ExtResource("5_1s7ag")]

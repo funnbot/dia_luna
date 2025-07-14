@@ -1,0 +1,60 @@
+[gd_scene load_steps=11 format=3 uid="uid://cx8rgwuba0wle"]
+
+[ext_resource type="Script" uid="uid://do414vfcyngvr" path="res://src/entity/character/CharacterBodyComponent.cs" id="1_3moi2"]
+[ext_resource type="Script" uid="uid://bf6oli88hqm2m" path="res://src/entity/character/player/Player.cs" id="1_i68tp"]
+[ext_resource type="Script" uid="uid://c1xxlnpx7v0yg" path="res://src/entity/character/player/InteractorComponent.cs" id="1_xhksp"]
+[ext_resource type="Script" uid="uid://chm5jusn7juny" path="res://src/entity/character/NavAgentComponent.cs" id="2_k0e2o"]
+[ext_resource type="SpriteFrames" uid="uid://cdwtthfh82g4m" path="res://assets/atlas/farmer1_sprite_frames.tres" id="5_fqe4p"]
+[ext_resource type="Script" uid="uid://jqaqt2ndv3if" path="res://src/entity/character/CharacterAnimationComponent.cs" id="5_i68tp"]
+[ext_resource type="Script" uid="uid://ddwp0j2flwamv" path="res://src/entity/character/player/InputComponent.cs" id="7_osscy"]
+[ext_resource type="Script" uid="uid://brxb40fbluvf5" path="res://src/entity/character/player/PlayerAnimatorComponent.cs" id="8_fqe4p"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_iuals"]
+radius = 4.15
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bs52m"]
+radius = 1.0
+
+[node name="Player" type="Node2D"]
+script = ExtResource("1_i68tp")
+
+[node name="CharacterAnimationComponent" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("5_fqe4p")
+animation = &"idle_down"
+script = ExtResource("5_i68tp")
+metadata/_custom_type_script = "uid://jqaqt2ndv3if"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(6, 6)
+
+[node name="VelocityComponent" type="CharacterBody2D" parent="."]
+motion_mode = 1
+script = ExtResource("1_3moi2")
+metadata/_custom_type_script = "uid://do414vfcyngvr"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VelocityComponent"]
+shape = SubResource("CircleShape2D_iuals")
+
+[node name="InteractorComponent" type="Node" parent="."]
+script = ExtResource("1_xhksp")
+metadata/_custom_type_script = "uid://c1xxlnpx7v0yg"
+
+[node name="SelectArea" type="Area2D" parent="InteractorComponent"]
+collision_layer = 8
+collision_mask = 8
+input_pickable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractorComponent/SelectArea"]
+shape = SubResource("CircleShape2D_bs52m")
+
+[node name="NavAgentComponent" type="NavigationAgent2D" parent="."]
+script = ExtResource("2_k0e2o")
+metadata/_custom_type_script = "uid://chm5jusn7juny"
+
+[node name="InputComponent" type="Node" parent="."]
+script = ExtResource("7_osscy")
+metadata/_custom_type_script = "uid://ddwp0j2flwamv"
+
+[node name="PlayerAnimatorComponent" type="Node" parent="."]
+script = ExtResource("8_fqe4p")
+metadata/_custom_type_script = "uid://brxb40fbluvf5"

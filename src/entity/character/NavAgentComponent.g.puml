@@ -1,0 +1,14 @@
+@startuml NavAgentLogic
+state "NavAgentLogic State" as DiaLuna_NavAgentLogic_State {
+  state "Idle" as DiaLuna_NavAgentLogic_State_Idle
+  state "Navigating" as DiaLuna_NavAgentLogic_State_Navigating
+  state "Unsynced" as DiaLuna_NavAgentLogic_State_Unsynced
+}
+
+DiaLuna_NavAgentLogic_State_Idle --> DiaLuna_NavAgentLogic_State_Navigating : Target
+DiaLuna_NavAgentLogic_State_Navigating --> DiaLuna_NavAgentLogic_State_Idle : Stop
+DiaLuna_NavAgentLogic_State_Navigating --> DiaLuna_NavAgentLogic_State_Navigating : PhysicsTick
+DiaLuna_NavAgentLogic_State_Navigating --> DiaLuna_NavAgentLogic_State_Navigating : Target
+DiaLuna_NavAgentLogic_State_Unsynced --> DiaLuna_NavAgentLogic_State_Idle : Synchronized
+[*] --> DiaLuna_NavAgentLogic_State_Unsynced
+@enduml

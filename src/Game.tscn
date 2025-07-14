@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=4 uid="uid://cywpu6lxdjhuu"]
+
+[ext_resource type="Script" uid="uid://b55h88jhs0oma" path="res://src/Game.cs" id="1_17mmo"]
+[ext_resource type="TileSet" uid="uid://bdk62mcdtnwo2" path="res://assets/atlas/tinyfarm.tres" id="5_km1yn"]
+[ext_resource type="SpriteFrames" uid="uid://cdwtthfh82g4m" path="res://assets/atlas/farmer1_sprite_frames.tres" id="7_dlhd6"]
+[ext_resource type="Script" uid="uid://jqaqt2ndv3if" path="res://src/entity/character/CharacterAnimationComponent.cs" id="8_rgpsw"]
+[ext_resource type="Script" uid="uid://c0d4snappvlkm" path="res://src/common/CharacterAnimationFramesBuilder.cs" id="9_x2540"]
+[ext_resource type="Texture2D" uid="uid://d4m5kh2ixvb84" path="res://assets/atlas/farmer1_atlas.tres" id="10_dlhd6"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_17mmo")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="TestButton" type="Button" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Test Button"
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+position = Vector2(-5, -3)
+tile_map_data = PackedByteArray("AAABAAIAAAAIAAAAAAACAAIAAAAIAAAAAAAAAAEAAAAFAAIAAAABAAEAAAAEAAIAAAACAAEAAAAEAAIAAAAAAAIAAAAIAAAAAAA=")
+tile_set = ExtResource("5_km1yn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(35, 0)
+sprite_frames = ExtResource("7_dlhd6")
+animation = &"idle_down"
+autoplay = "idle_down"
+script = ExtResource("8_rgpsw")
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource("9_x2540")
+_image = ExtResource("10_dlhd6")
+_savePath = "res://assets/atlas/farmer1_sprite_frames.tres"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/TestButton" to="." method="OnTestButtonPressed"]
