@@ -477,7 +477,7 @@ dotnet_diagnostic.RCS1036.severity = none
 dotnet_diagnostic.rcs1228.severity = none
 # Godot objects automatically dispose of themselves, but this warns for implementing IDisposable
 # dotnet_diagnostic.CA1001.severity = none
-dotnet_code_quality.CAXXXX.excluded_type_names_with_derived_types = T:Godot.RefCounted
+dotnet_code_quality.CA1001.excluded_type_names_with_derived_types = T:Godot.RefCounted
 
 dotnet_style_prefer_collection_expression = when_types_loosely_match:suggestion
 
