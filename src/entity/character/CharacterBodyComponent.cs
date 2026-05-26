@@ -9,8 +9,8 @@ using Godot;
 /// </summary>
 public interface IVelocityRepo
 {
-	public Vector2 TargetVelocity { get; set; }
-	public Vector2 GlobalPosition { get; set; }
+    public Vector2 TargetVelocity { get; set; }
+    public Vector2 GlobalPosition { get; set; }
 }
 
 // lifecycle of IAutoNode and friends
@@ -33,10 +33,10 @@ public interface IVelocityRepo
 
 public interface ICharacterBody
 {
-	public Vector2 TargetVelocity { get; set; }
-	public Vector2 GlobalPosition { get; }
-	public Transform2D GlobalTransform { get; }
-	public Transform2D GetCanvasTransform();
+    public Vector2 TargetVelocity { get; set; }
+    public Vector2 GlobalPosition { get; }
+    public Transform2D GlobalTransform { get; }
+    public Transform2D GetCanvasTransform();
 }
 
 /// <summary>
@@ -48,39 +48,33 @@ public interface ICharacterBody
 [Meta(typeof(IAutoNode))]
 public partial class CharacterBodyComponent : CharacterBody2D, ICharacterBody
 {
-	public override void _Notification(int what)
-	{
-		this.Notify(what);
-	}
+    public override void _Notification(int what) => this.Notify(what);
 
-	private Node2D? _parent;
+    private Node2D? _parent;
 
-	public Vector2 TargetVelocity { get; set; }
+    public Vector2 TargetVelocity { get; set; }
 
-	public void OnReady()
-	{
-		SetPhysicsProcess(true);
-	}
+    public void OnReady() => SetPhysicsProcess(true);
 
-	public void OnEnterTree()
-	{
-		TopLevel = true;
-		_parent = GetParent<Node2D>();
-		// setting TopLevel = true appears to copy local transform to global transform
-		GlobalTransform = _parent.GlobalTransform;
-		ProcessPhysicsPriority = _parent.ProcessPhysicsPriority - 1;
-		ProcessPriority = _parent.ProcessPriority - 1;
-	}
+    public void OnEnterTree()
+    {
+        TopLevel = true;
+        _parent = GetParent<Node2D>();
+        // setting TopLevel = true appears to copy local transform to global transform
+        GlobalTransform = _parent.GlobalTransform;
+        ProcessPhysicsPriority = _parent.ProcessPhysicsPriority - 1;
+        ProcessPriority = _parent.ProcessPriority - 1;
+    }
 
-	public void OnPhysicsProcess(double delta)
-	{
-		Vector2 target = TargetVelocity;
-		if (!target.IsZeroApprox())
-		{
-			Velocity = TargetVelocity;
-			MoveAndSlide();
-		}
+    public void OnPhysicsProcess(double delta)
+    {
+        var target = TargetVelocity;
+        if (!target.IsZeroApprox())
+        {
+            Velocity = TargetVelocity;
+            MoveAndSlide();
+        }
 
-		_parent!.GlobalTransform = GlobalTransform;
-	}
+        _parent!.GlobalTransform = GlobalTransform;
+    }
 }

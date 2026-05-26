@@ -4,7 +4,6 @@
 
 namespace DiaLuna.Interactable;
 
-using System.Collections.Generic;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using Godot;
@@ -14,13 +13,13 @@ using Godot;
 /// </summary>
 public enum TargetPriority
 {
-	First,
-	Enemy,
-	NPC,
-	Machine,
-	Crop,
+    First = 0,
+    Enemy = 1,
+    NPC = 2,
+    Machine = 3,
+    Crop = 4,
 
-	Last,
+    Last = 5,
 }
 
 // TODO: TargetGroup enum?
@@ -30,39 +29,38 @@ public enum TargetPriority
 /// </summary>
 public interface ITarget
 {
-	/// <summary>
-	/// Performs the interaction logic for this object using the specified interactor and interaction tool.
-	/// </summary>
-	/// <param name="agent">The entity attempting to interact with this object.</param>
-	public void Interact(IAgent agent);
+    /// <summary>
+    /// Performs the interaction logic for this object using the specified interactor and interaction tool.
+    /// </summary>
+    /// <param name="agent">The entity attempting to interact with this object.</param>
+    public void Interact(IAgent agent);
 
-	/// <summary>
-	/// Gets a value indicating whether this object is currently interactable.
-	/// </summary>
-	/// <param name="agent"></param>
-	public bool IsActable(IAgent agent) => true;
+    /// <summary>
+    /// Gets a value indicating whether this object is currently interactable.
+    /// </summary>
+    public bool IsActable(IAgent agent) => true;
 
-	/// <summary>
-	/// Gets the interaction priority for this object when multiple interactables are available.
-	/// Lower values indicate first priority for interaction.
-	/// </summary>
-	/// <param name="agent">The interactor attempting to interact.</param>
-	/// <returns>An integer representing the priority of this interactable.</returns>
-	public TargetPriority GetActPriority(IAgent agent) => TargetPriority.Last;
+    /// <summary>
+    /// Gets the interaction priority for this object when multiple interactables are available.
+    /// Lower values indicate first priority for interaction.
+    /// </summary>
+    /// <param name="agent">The interactor attempting to interact.</param>
+    /// <returns>An integer representing the priority of this interactable.</returns>
+    public TargetPriority GetActPriority(IAgent agent) => TargetPriority.Last;
 
-	/// <summary>
-	/// Called when an <see cref="IAgent"/> begins hovering over this interactable.
-	/// </summary>
-	/// <param name="agent">The interactor that is hovering.</param>
-	/// <returns>True if the hover enter was successful; otherwise, false.</returns>
-	public void HoverEnter(IAgent agent) { }
+    /// <summary>
+    /// Called when an <see cref="IAgent"/> begins hovering over this interactable.
+    /// </summary>
+    /// <param name="agent">The interactor that is hovering.</param>
+    /// <returns>True if the hover enter was successful; otherwise, false.</returns>
+    public void HoverEnter(IAgent agent) { }
 
-	/// <summary>
-	/// Called when an <see cref="IAgent"/> stops hovering over this interactable.
-	/// </summary>
-	/// <param name="agent">The interactor that was hovering.</param>
-	/// <returns>True if the hover exit was successful; otherwise, false.</returns>
-	public void HoverExit(IAgent agent) { }
+    /// <summary>
+    /// Called when an <see cref="IAgent"/> stops hovering over this interactable.
+    /// </summary>
+    /// <param name="agent">The interactor that was hovering.</param>
+    /// <returns>True if the hover exit was successful; otherwise, false.</returns>
+    public void HoverExit(IAgent agent) { }
 }
 
 /// <summary>
@@ -70,20 +68,20 @@ public interface ITarget
 /// </summary>
 public interface IAgent
 {
-	/// <summary>
-	/// Gets the currently active tool used by the agent for interactions.
-	/// </summary>
-	public IInteractionTool ActiveTool { get; }
+    /// <summary>
+    /// Gets the currently active tool used by the agent for interactions.
+    /// </summary>
+    public IInteractionTool ActiveTool { get; }
 
-	/// <summary>
-	/// Gets the global position of the interactor in the game world.
-	/// </summary>
-	public Vector2 GlobalPosition { get; }
+    /// <summary>
+    /// Gets the global position of the interactor in the game world.
+    /// </summary>
+    public Vector2 GlobalPosition { get; }
 
-	/// <summary>
-	/// Gets the facing direction of the interactor as a normalized vector.
-	/// </summary>
-	public Vector2 Facing { get; }
+    /// <summary>
+    /// Gets the facing direction of the interactor as a normalized vector.
+    /// </summary>
+    public Vector2 Facing { get; }
 }
 
 // TODO: IInteractionTool is more complicated
@@ -163,34 +161,34 @@ public interface IAgent
 
 public interface ITargetCollector
 {
-	public ChannelReader<ITarget> CollectTargets();
+    public ChannelReader<ITarget> CollectTargets();
 }
 
 public interface IInteractionVfx
 {
-	public Task Run();
+    public Task Run();
 }
 
 public interface IInteractionUI
 {
-	public Task ShowHover();
-	public void HideHover();
+    public Task ShowHover();
+    public void HideHover();
 }
 
 public interface IInteractionCoordinator
 {
-	public Task Run();
+    public Task Run();
 }
 
 public interface IInteractionItem
 {
-	/// <summary>
-	/// The IActuator is a Node, child of Player, so maybe that provides the necessary tools for effecting the environment
-	/// </summary>
-	public void Interact();
+    /// <summary>
+    /// The IActuator is a Node, child of Player, so maybe that provides the necessary tools for effecting the environment
+    /// </summary>
+    public void Interact();
 
-	public IInteractionVfx Vfx { get; }
-	public IInteractionUI UI { get; }
+    public IInteractionVfx Vfx { get; }
+    public IInteractionUI UI { get; }
 }
 
 /// <summary>
@@ -199,16 +197,16 @@ public interface IInteractionItem
 /// </summary>
 public interface IInteractionTool
 {
-	public ITargetCollector TargetCollector { get; }
-	public IInteractionItem Item { get; }
+    public ITargetCollector TargetCollector { get; }
+    public IInteractionItem Item { get; }
 }
 
 public abstract partial class InteractionTool : Node
 {
-	public ITargetCollector TargetCollector { get; private set; } = default!;
-	public IInteractionItem Item { get; private set; } = default!;
+    public ITargetCollector TargetCollector { get; private set; } = default!;
+    public IInteractionItem Item { get; private set; } = default!;
 }
 
 // temp example implementation
 
-public partial class PointSingleInteractionTool : InteractionTool { }
+public partial class PointSingleInteractionTool : InteractionTool;

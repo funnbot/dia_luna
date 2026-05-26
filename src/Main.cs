@@ -1,10 +1,12 @@
 namespace DiaLuna;
 
-using Chickensoft.GameTools.Displays;
 using Godot;
+using Chickensoft.GameTools.Displays;
+
 #if RUN_TESTS
 using System.Reflection;
 using Chickensoft.GoDotTest;
+using Chickensoft.GodotNodeInterfaces;
 #endif
 
 // This entry-point file is responsible for determining if we should run tests.
@@ -14,40 +16,37 @@ using Chickensoft.GoDotTest;
 
 public partial class Main : Node2D
 {
-	public Vector2I DesignResolution => Display.UHD4k;
+    public Vector2I DesignResolution => Display.UHD4k;
 #if RUN_TESTS
-	public TestEnvironment Environment = default!;
+    public TestEnvironment Environment = default!;
 #endif
 
-	public override void _Ready()
-	{
-		// Correct any erroneous scaling and guess sensible defaults.
-		GetWindow().LookGood(WindowScaleBehavior.UIFixed, DesignResolution);
+    public override void _Ready()
+    {
+        // Correct any erroneous scaling and guess sensible defaults.
+        GetWindow().LookGood(WindowScaleBehavior.UIFixed, DesignResolution);
 
 #if RUN_TESTS
-		// If this is a debug build, use GoDotTest to examine the
-		// command line arguments and determine if we should run tests.
-		Environment = TestEnvironment.From(OS.GetCmdlineArgs());
-		if (Environment.ShouldRunTests)
-		{
-			CallDeferred("RunTests");
-			return;
-		}
+        // If this is a debug build, use GoDotTest to examine the
+        // command line arguments and determine if we should run tests.
+        Environment = TestEnvironment.From(OS.GetCmdlineArgs());
+        if (Environment.ShouldRunTests)
+        {
+            RuntimeContext.IsTesting = true;
+            CallDeferred("RunTests");
+            return;
+        }
 #endif
 
-		// If we don't need to run tests, we can just switch to the game scene.
-		CallDeferred("RunScene");
-	}
+        // If we don't need to run tests, we can just switch to the game scene.
+        CallDeferred("RunScene");
+    }
 
 #if RUN_TESTS
-	private void RunTests()
-	{
-		_ = GoTest.RunTests(Assembly.GetExecutingAssembly(), this, Environment);
-	}
+    private void RunTests()
+      => _ = GoTest.RunTests(Assembly.GetExecutingAssembly(), this, Environment);
 #endif
 
-	private void RunScene()
-	{
-		GetTree().ChangeSceneToFile("res://src/Game.tscn");
-	}
+    private void RunScene()
+      => GetTree().ChangeSceneToFile("res://src/Game.tscn");
 }
