@@ -7,6 +7,7 @@ jobs:
   visual_tests:
     name: 🖼 Visual Tests with ${{ matrix.render-driver }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     # Only run the workflow if it's not a PR or if it's a PR from a fork.
     # This prevents duplicate workflows from running on PR's that originate
     # from the repository itself.
@@ -26,7 +27,7 @@ jobs:
         shell: bash
     steps:
       - name: 🧾 Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # If using git-lfs (large file storage), this ensures that your files
           # are checked out properly.
@@ -35,7 +36,7 @@ jobs:
           submodules: 'recursive'
 
       - name: 💽 Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           # Use the .NET SDK from global.json in the root of the repository.
           global-json-file: global.json
@@ -51,7 +52,7 @@ jobs:
       - name: 💾 Install Graphics Driver Emulators
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: mesa-vulkan-drivers binutils
+          packages: mesa-vulkan-drivers binutils x11-xserver-utils
           version: 1.0
 
       - name: 🤖 Setup Godot
@@ -67,17 +68,21 @@ jobs:
           version: global.json
 
       - name: 🧑‍🔬 Generate .NET Bindings
-        run: godot --headless --build-solutions --quit || exit 0
+        run: godot --headless --build-solutions --quit
 
       - name: 🌋 Run Tests in Godot
         run: |
-          xvfb-run godot --audio-driver Dummy --rendering-driver ${{ matrix.render-driver }} --run-tests --quit-on-finish --coverage
+          xvfb-run godot --audio-driver Dummy --rendering-driver ${{ matrix.render-driver }} --run-tests --quit-on-finish
 
           # The --coverage flag is used by GoDotTest to control the exit code
           # of Godot by force-exiting through C#.
           #
-          # Since Godot tends to exit with non-zero exit codes (even on success)
-          # this flag allows GoDotTest to ensure that this step will only fail
-          # when the tests fail.
+          # Since Godot sometimes exits with non-zero exit codes (even on success),
+          # adding this flag to the above command may allow GoDotTest to ensure that
+          # this step will only fail when the tests fail, and not because Godot didn't
+          # exit cleanly.
+          #
+          # However, note that the --coverage flag can sometimes cause other failures
+          # by forcing Godot to exit before it can clean up its resources completely.
 
           echo "Finished running tests in Godot with emulated ${{ matrix.render-driver }} graphics."

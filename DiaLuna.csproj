@@ -1,4 +1,4 @@
-<Project Sdk="Godot.NET.Sdk/4.4.1">
+<Project Sdk="Godot.NET.Sdk/4.7.0-beta.3">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
@@ -11,9 +11,11 @@
     <!-- Required for some nuget packages to work -->
     <!-- godotengine/godot/issues/42271#issuecomment-751423827 -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <!-- Show generated files -->
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-    <CompilerGeneratedFilesOutputPath>.generated</CompilerGeneratedFilesOutputPath>
+    <!-- To show generated files -->
+    <!-- <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles> -->
+    <!--
+      <CompilerGeneratedFilesOutputPath>.generated</CompilerGeneratedFilesOutputPath>
+    -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -26,52 +28,37 @@
     <SkipTests Condition="'$(SKIP_TESTS)' != ''">true</SkipTests>
     <RunTests>false</RunTests>
   </PropertyGroup>
-  <PropertyGroup
-    Condition="
-        ('$(Configuration)' == 'Debug' or '$(Configuration)' == 'ExportDebug')
-        and '$(SkipTests)' != 'true' "
-  >
+
+  <PropertyGroup Condition="('$(Configuration)' == 'Debug' or '$(Configuration)' == 'ExportDebug') and '$(SkipTests)' != 'true' ">
     <RunTests>true</RunTests>
     <DefineConstants>$(DefineConstants);RUN_TESTS</DefineConstants>
   </PropertyGroup>
+
+
   <ItemGroup>
     <PackageReference Include="ImGui.NET" Version="1.91.6.1" />
-    <PackageReference Include="Chickensoft.Collections" Version="1.13.13" />
-    <PackageReference Include="Chickensoft.GameTools" Version="2.0.28" />
-    <PackageReference Include="Chickensoft.GodotNodeInterfaces" Version="2.4.23" />
+    <PackageReference Include="Chickensoft.Collections" Version="3.1.4" />
+    <PackageReference Include="Chickensoft.GameTools" Version="3.1.22" />
+    <PackageReference Include="Chickensoft.GodotNodeInterfaces" Version="3.0.16" />
     <PackageReference Include="Chickensoft.Introspection" Version="3.0.2" />
-    <PackageReference
-      Include="Chickensoft.Introspection.Generator"
-      Version="3.0.2"
-      PrivateAssets="all"
-      OutputItemType="analyzer"
-    />
-    <PackageReference Include="Chickensoft.LogicBlocks" Version="5.19.1" />
-    <PackageReference
-      Include="Chickensoft.LogicBlocks.DiagramGenerator"
-      Version="5.19.1"
-      PrivateAssets="all"
-      OutputItemType="analyzer"
-    />
-    <PackageReference Include="Chickensoft.AutoInject" Version="2.8.1" PrivateAssets="all" />
-    <PackageReference Include="Chickensoft.SaveFileBuilder" Version="1.3.16" />
-    <PackageReference
-      Include="Chickensoft.AutoInject.Analyzers"
-      Version="2.8.1"
-      PrivateAssets="all"
-      OutputItemType="analyzer"
-    />
-    <PackageReference Include="Roslynator.Analyzers" Version="4.13.1">
+    <PackageReference Include="Chickensoft.Introspection.Generator" Version="3.0.2" PrivateAssets="all" OutputItemType="analyzer" />
+    <PackageReference Include="Chickensoft.LogicBlocks" Version="5.20.0" />
+    <PackageReference Include="Chickensoft.LogicBlocks.DiagramGenerator" Version="5.20.0" PrivateAssets="all" OutputItemType="analyzer" />
+    <PackageReference Include="Chickensoft.AutoInject" Version="2.13.7" PrivateAssets="all" />
+    <PackageReference Include="Chickensoft.SaveFileBuilder" Version="1.3.70" />
+    <PackageReference Include="Chickensoft.AutoInject.Analyzers" Version="2.13.7" PrivateAssets="all" OutputItemType="analyzer" />
+    <PackageReference Include="Roslynator.Analyzers" Version="4.15.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+
   <ItemGroup Condition="'$(RunTests)' == 'true'">
     <!-- Test dependencies go here! -->
     <!-- Dependencies added here will not be included in release builds. -->
-    <PackageReference Include="Chickensoft.GoDotTest" Version="1.7.2" />
+    <PackageReference Include="Chickensoft.GoDotTest" Version="2.0.35" />
     <!-- Used to drive test scenes when testing visual code -->
-    <PackageReference Include="Chickensoft.GodotTestDriver" Version="3.1.20" />
+    <PackageReference Include="Chickensoft.GodotTestDriver" Version="3.1.72" />
     <!-- Bring your own assertion library for tests! -->
     <!-- We're using Shouldly for this example, but you can use anything. -->
     <PackageReference Include="Shouldly" Version="4.3.0" />
@@ -80,6 +67,7 @@
     <!-- LightMoq is a Chickensoft package which makes it more like Moq. -->
     <PackageReference Include="LightMoq" Version="0.1.0" />
   </ItemGroup>
+
   <ItemGroup Condition="'$(RunTests)' != 'true'">
     <Compile Remove="test/**/*.cs" />
     <None Remove="test/**/*" />
@@ -90,11 +78,7 @@
     <Compile Remove="source_generators/**/*.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference
-      Include="source_generators\SourceGenerators.csproj"
-      PrivateAssets="all"
-      OutputItemType="Analyzer"
-    />
+    <ProjectReference Include="source_generators\SourceGenerators.csproj" PrivateAssets="all" OutputItemType="Analyzer" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="project.godot" />

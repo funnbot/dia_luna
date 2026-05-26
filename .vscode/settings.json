@@ -7,10 +7,18 @@
     },
     "editor.defaultFormatter": "csharpier.csharpier-vscode",
     "editor.formatOnPaste": true,
-    "editor.formatOnSave": false,
-    "editor.formatOnType": true
+    "editor.formatOnSave": true,
+    "editor.formatOnType": false
   },
-  // CSharp Settings
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        // run `clang-format` on Godot shader files when saving
+        "match": "\\.gdshader|\\.gdshaderinc$",
+        "cmd": "clang-format -i '${file}'"
+      }
+    ]
+  },
   "csharp.debug.justMyCode": false,
   "csharp.debug.suppressJITOptimizations": true,
   "csharp.format.enable": false,
@@ -176,14 +184,6 @@
     "**/.git/subtree-cache/**": true,
     "**/.godot/**": true
   },
-  "github.copilot.chat.codeGeneration.instructions": [
-    {
-      "text": "C# 12, Godot 4.4.1"
-    },
-    {
-      "text": "Use best practices."
-    }
-  ],
   "markdownlint.config": {
     // Allow non-unique heading names so we don't break the changelog.
     "MD024": false,
@@ -197,4 +197,23 @@
   "omnisharp.enableMsBuildLoadProjectsOnDemand": false,
   "omnisharp.maxFindSymbolsItems": 3000,
   "omnisharp.useModernNet": true,
+  // Remove these if you're happy with your terminal profiles.
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "terminal.integrated.profiles.windows": {
+    "Command Prompt": {
+      "icon": "terminal-cmd",
+      "path": [
+        "${env:windir}\\Sysnative\\cmd.exe",
+        "${env:windir}\\System32\\cmd.exe"
+      ]
+    },
+    "Git Bash": {
+      "icon": "terminal",
+      "source": "Git Bash"
+    },
+    "PowerShell": {
+      "icon": "terminal-powershell",
+      "source": "PowerShell"
+    }
+  }
 }
